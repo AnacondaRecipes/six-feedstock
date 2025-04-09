@@ -1,17 +1,17 @@
-{% set version = "1.16.0" %}
+{% set name = "six" %}
+{% set version = "1.17.0" %}
 
 package:
-  name: six
+  name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/s/six/six-{{ version }}.tar.gz
-  sha256: 1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/six-{{ version }}.tar.gz
+  sha256: ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81
 
 build:
-  number: 1
-  noarch: python
-  script: {{ PYTHON }} -m pip install . -vv
+  number: 0
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
 
 requirements:
   host:
@@ -23,12 +23,16 @@ requirements:
     - python
 
 test:
+  source_files:
+    - test_six.py
   imports:
     - six
   commands:
     - pip check
+    - pytest -v test_six.py
   requires:
     - pip
+    - pytest
 
 about:
   home: https://six.readthedocs.io/
